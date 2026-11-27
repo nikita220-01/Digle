@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digle Message</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ЭКРАН АВТОРИЗАЦИИ -->
+<div id="authScreen">
+    <div class="auth-container">
+        <h2 id="authTitle">Вход в Digle</h2>
+        <form id="authForm">
+            <div id="nameField" style="display: none;">
+                <input type="text" id="regUsername" placeholder="Имя пользователя">
+            </div>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Пароль" required>
+            <button type="submit" id="authBtn">Войти</button>
+        </form>
+        <div class="auth-switch">
+            <span id="switchText">Нет аккаунта?</span>
+            <a id="switchLink">Зарегистрироваться</a>
+        </div>
+    </div>
+</div>
+
+<!-- ПРИЛОЖЕНИЕ -->
+<div id="app" style="display: none;">
+
+    <!-- ШАПКА -->
+    <div class="app-header">
+        <div class="header-left">
+            <button id="burgerBtn">☰</button>
+        </div>
+        <h1>DIGLE</h1>
+        <div class="header-right">
+            <button id="userIconBtn">?</button>
+        </div>
+    </div>
+
+    <!-- ЛЕВАЯ ПАНЕЛЬ (МЕНЮ + КОНТАКТЫ) -->
+    <div id="leftPanel" class="left-panel">
+        <div class="panel-header">
+            <h2>Меню</h2>
+            <button class="close-panel" onclick="closePanels()">✕</button>
+        </div>
+        <div class="menu-item" id="settingsMenuItem">⚙️ Настройки</div>
+        <div class="menu-item active">🔍 Поиск друзей</div>
+        <div class="menu-item">💬 Мои чаты</div>
+        <input type="text" id="searchInput" placeholder="ID (333аб) или ник...">
+        <div id="searchResults"></div>
+        <div id="usersBar"></div>
+    </div>
+
+    <!-- ОБЛАСТЬ ЧАТА -->
+    <div class="chat-area">
+        <div id="chatHeader">Выберите пользователя</div>
+        <div id="chatMessages">
+            <div class="empty-chat">Выберите пользователя слева, чтобы начать общение</div>
+        </div>
+        <div id="inputArea">
+            <button id="emojiBtn">😊</button>
+            <button id="attachBtn">📎</button>
+            <input type="file" id="fileInput" style="display: none;">
+            <input type="text" id="messageInput" placeholder="Написать сообщение...">
+            <button id="sendBtn">Отправить</button>
+        </div>
+    </div>
+
+    <!-- ЭМОДЗИ ПИКЕР -->
+    <div id="emojiPicker" class="emoji-picker"></div>
+
+    <!-- ПРАВАЯ ПАНЕЛЬ (КАБИНЕТ) -->
+    <div id="rightPanel" class="right-panel">
+        <div class="panel-header">
+            <h2>КАБИНЕТ</h2>
+            <button class="close-panel" onclick="closePanels()">✕</button>
+        </div>
+
+        <div class="profile-section">
+            <div id="profileAvatar" class="profile-avatar">
+                <span id="avatarLetter">?</span>
+            </div>
+            <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+            <h3 id="profileName">Загрузка...</h3>
+            <p id="profileId" class="profile-id" title="Нажми, чтобы скопировать">...</p>
+        </div>
+
+        <div class="settings-section">
+            <h4>РЕДАКТИРОВАТЬ</h4>
+            <label>Юзернейм</label>
+            <input type="text" id="editUsername" placeholder="Новый ник">
+            <button id="saveUsernameBtn" class="btn-primary">Сохранить</button>
+
+            <label style="margin-top: 15px;">О себе</label>
+            <textarea id="profileBio" placeholder="Расскажи о себе..." rows="3"></textarea>
+            <button id="saveBioBtn" class="btn-primary">Сохранить bio</button>
+        </div>
+
+        <div class="settings-section">
+            <h4>БЕЗОПАСНОСТЬ</h4>
+            <label>Новый пароль</label>
+            <input type="password" id="newPassword" placeholder="Минимум 6 символов">
+            <label>Подтверждение</label>
+            <input type="password" id="confirmPassword" placeholder="Повтори пароль">
+            <button id="changePasswordBtn" class="btn-primary">Сменить пароль</button>
+        </div>
+
+        <button id="logoutBtn" class="btn-danger">Выйти из аккаунта</button>
+        <button id="deleteAccountBtn" class="btn-danger-outline">Удалить аккаунт</button>
+    </div>
+
+    <!-- BACKDROP -->
+    <div id="backdrop"></div>
+
+</div>
+
+<!-- УВЕДОМЛЕНИЕ -->
+<div id="toast"></div>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- СКРИПТ -->
+<script src="script.js"></script>
+
+</body>
+</html>
