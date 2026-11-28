@@ -503,6 +503,7 @@ async function openChatWith(otherUser, avatarEl) {
     currentChat = { id: chatId, title: otherUser.username, otherUserId: otherUser.id };
     document.getElementById('chatHeader').textContent = otherUser.username + ' (' + otherUser.display_id + ')';
     document.getElementById('inputArea').style.display = 'flex';
+    document.getElementById('inputArea').classList.add('active'); // ← ФИКС ДЛЯ МОБИЛЬНЫХ
 
     await loadMessages();
     subscribeToMessages();

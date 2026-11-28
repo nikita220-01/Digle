@@ -750,10 +750,23 @@ body.light-theme .message.other {
 
     #chatMessages {
         padding: 15px;
+        padding-bottom: 80px;
     }
 
     #inputArea {
+        display: none;
         padding: 10px 12px;
+    }
+
+    #inputArea.active {
+        display: flex !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #1a1a1a;
+        border-top: 1px solid #333;
+        z-index: 50;
     }
 
     #messageInput {
@@ -857,7 +870,6 @@ body.light-theme .message.other {
     }
 }
 
-/* Горизонтальная ориентация на мобильных */
 @media (max-height: 500px) and (orientation: landscape) {
     .app-header {
         height: 45px;
