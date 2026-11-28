@@ -264,7 +264,6 @@ async function loadSettings() {
         document.body.classList.remove('light-theme');
     }
 
-    // Загружаем обои чата
     if (settings?.chat_background) {
         const chatArea = document.querySelector('.chat-area');
         chatArea.style.backgroundImage = `url(${settings.chat_background})`;
@@ -548,10 +547,9 @@ function renderMessage(msg) {
     let content = '';
     if (msg.attachment_url) {
         if (msg.attachment_type === 'image') {
-            content += `<img class="message-image" src="${msg.attachment_url}" onclick="window.open(this.src)">`;
+            content += `<img class="message-image" src="${msg.attachment_url}" onclick="openImageModal('${msg.attachment_url}')" title="Нажми для полного размера">`;
         } else {
-            // Вместо файлов показываем перечёркнутое фото
-            content += `<div style="opacity: 0.5; font-size: 13px;">🚫 Файл недоступен</div><br>`;
+            content += `<a href="${msg.attachment_url}" target="_blank" style="color: inherit; text-decoration: underline;">📎 Файл</a><br>`;
         }
     }
     if (msg.body) content += msg.body;
@@ -566,22 +564,13 @@ function renderMessage(msg) {
     container.appendChild(div);
 }
 
-window.deleteMessage = async (messageId) => {
-    if (!confirm('Удалить сообщение?')) return;
-
-    const { error } = await db
-        .from('messages')
-        .delete()
-        .eq('id', messageId);
-
-    if (error) {
-        console.error('Ошибка удаления:', error);
-        alert('Ошибка: ' + error.message);
-    } else {
-        const msgEl = document.querySelector(`[data-message-id="${messageId}"]`);
-        if (msgEl) msgEl.remove();
-        showToast('Сообщение удалено');
-    }
+// Модальное окно для просмотра изображения
+window.openImageModal = (imageUrl) => {
+    const modal = document.createElement('div');
+    modal.className = 'image-modal';
+    modal.innerHTML = `<img src="${imageUrl}" alt="">`;
+    modal.addEventListener('click', () => modal.remove());
+    document.body.appendChild(modal);
 };
 
 function subscribeToMessages() {
@@ -660,12 +649,52 @@ document.getElementById('messageInput').addEventListener('keypress', (e) => {
     }
 });
 
-// === КНОПКА ФАЙЛОВ ОТКЛЮЧЕНА (показывает заглушку) ===
+// === ОТПРАВКА ФАЙЛОВ ===
 const attachBtn = document.getElementById('attachBtn');
-attachBtn.addEventListener('click', () => {
-    showToast('🚫 Отправка файлов временно отключена');
+const fileInput = document.getElementById('fileInput');
+
+attachBtn.addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+        alert('Файл слишком большой (макс. 5 МБ)');
+        return;
+    }
+
+    attachBtn.disabled = true;
+    attachBtn.textContent = '⏳';
+
+    const ext = file.name.split('.').pop();
+    const fileName = currentUser.id + '/' + Date.now() + '.' + ext;
+    const isImage = file.type.startsWith('image/');
+
+    const { error: uploadError } = await db.storage
+        .from('attachments')
+        .upload(fileName, file);
+
+    if (uploadError) {
+        console.error('Ошибка загрузки файла:', uploadError);
+        alert('Ошибка загрузки: ' + uploadError.message);
+        attachBtn.disabled = false;
+        attachBtn.textContent = '📎';
+        return;
+    }
+
+    const { data: { publicUrl } } = db.storage
+        .from('attachments')
+        .getPublicUrl(fileName);
+
+    await sendMessage(null, isImage ? 'image' : 'file', publicUrl);
+
+    attachBtn.disabled = false;
+    attachBtn.textContent = '📎';
+    fileInput.value = '';
 });
 
+// === ПОИСК ===
 const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
 
@@ -730,6 +759,7 @@ searchInput.addEventListener('input', async (e) => {
     });
 });
 
+// === АВАТАРКА ===
 const profileAvatar = document.getElementById('profileAvatar');
 const avatarInput = document.getElementById('avatarInput');
 
@@ -772,6 +802,7 @@ avatarInput.addEventListener('change', async (e) => {
     showToast('Аватар сохранён!');
 });
 
+// === СОХРАНЕНИЕ ИМЕНИ ===
 document.getElementById('saveUsernameBtn').addEventListener('click', async () => {
     const newName = document.getElementById('editUsername').value.trim();
     if (!newName) { alert('Введите имя'); return; }
@@ -797,18 +828,21 @@ document.getElementById('saveUsernameBtn').addEventListener('click', async () =>
     btn.textContent = 'Сохранить';
 });
 
+// === КОПИРОВАНИЕ ID ===
 document.getElementById('profileId').addEventListener('click', () => {
     const id = currentProfile?.display_id || '???';
     navigator.clipboard.writeText(id);
     showToast('ID скопирован: ' + id);
 });
 
+// === ВЫХОД ===
 document.getElementById('logoutBtn').addEventListener('click', async () => {
     await db.from('profiles').update({ is_online: false }).eq('id', currentUser.id);
     await db.auth.signOut();
     location.reload();
 });
 
+// === УВЕДОМЛЕНИЯ ===
 function showToast(msg) {
     const toast = document.getElementById('toast');
     toast.textContent = msg;
@@ -816,6 +850,7 @@ function showToast(msg) {
     setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
+// === ПРОВЕРКА ПРИ ЗАГРУЗКЕ ===
 db.auth.onAuthStateChange((event, session) => {
     console.log('Auth event:', event, session?.user?.email);
 
