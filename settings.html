@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Настройки — Digle</title>
+    <title>Настройки — Digle Message</title>
+    <meta name="description" content="Настройки мессенджера Digle Message. Тема, шрифт, уведомления и обои чата.">
+    <meta name="keywords" content="Digle, Digle Message, настройки мессенджера">
+    <meta name="author" content="Nikibellar">
+    <meta name="robots" content="noindex, follow">
+    
     <style>
         * {
             margin: 0;
@@ -278,7 +283,6 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Мобильная адаптация */
         @media (max-width: 768px) {
             body {
                 padding: 70px 15px 30px;
@@ -426,7 +430,6 @@
 
     let currentUser = null;
 
-    // Заводские настройки
     const DEFAULT_SETTINGS = {
         theme: 'dark',
         font_size: 14,
@@ -471,7 +474,6 @@
         applyFontSize(settings?.font_size || 14);
     })();
 
-    // Загрузка фона
     document.getElementById('chatBackgroundInput').addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -499,7 +501,6 @@
         showToast('Фон загружен! Сохрани настройки.');
     });
 
-    // Сохранение настроек
     document.getElementById('saveSettingsBtn').addEventListener('click', async () => {
         const theme = document.getElementById('settingsTheme').value;
         const fontSize = parseInt(document.getElementById('settingsFontSize').value);
@@ -527,7 +528,6 @@
         showToast('✅ Настройки сохранены!');
     });
 
-    // СБРОС ДО ЗАВОДСКИХ
     document.getElementById('resetSettingsBtn').addEventListener('click', async () => {
         if (!confirm('Сбросить все настройки до заводских?\n\n• Тема: тёмная\n• Шрифт: 14px\n• Звуки: вкл\n• Уведомления: вкл\n• Фон чата: удалён')) {
             return;
@@ -550,7 +550,6 @@
             return;
         }
 
-        // Сбрасываем UI
         document.getElementById('settingsTheme').value = DEFAULT_SETTINGS.theme;
         document.getElementById('settingsFontSize').value = DEFAULT_SETTINGS.font_size;
         document.getElementById('settingsSounds').checked = DEFAULT_SETTINGS.sounds;
