@@ -503,7 +503,7 @@ async function openChatWith(otherUser, avatarEl) {
     currentChat = { id: chatId, title: otherUser.username, otherUserId: otherUser.id };
     document.getElementById('chatHeader').textContent = otherUser.username + ' (' + otherUser.display_id + ')';
     document.getElementById('inputArea').style.display = 'flex';
-    document.getElementById('inputArea').classList.add('active'); // ← ФИКС ДЛЯ МОБИЛЬНЫХ
+    document.getElementById('inputArea').classList.add('active');
 
     await loadMessages();
     subscribeToMessages();
@@ -550,7 +550,8 @@ function renderMessage(msg) {
         if (msg.attachment_type === 'image') {
             content += `<img class="message-image" src="${msg.attachment_url}" onclick="window.open(this.src)">`;
         } else {
-            content += `<a href="${msg.attachment_url}" target="_blank" style="color: inherit;">📎 Файл</a><br>`;
+            // Вместо файлов показываем перечёркнутое фото
+            content += `<div style="opacity: 0.5; font-size: 13px;">🚫 Файл недоступен</div><br>`;
         }
     }
     if (msg.body) content += msg.body;
@@ -659,48 +660,10 @@ document.getElementById('messageInput').addEventListener('keypress', (e) => {
     }
 });
 
+// === КНОПКА ФАЙЛОВ ОТКЛЮЧЕНА (показывает заглушку) ===
 const attachBtn = document.getElementById('attachBtn');
-const fileInput = document.getElementById('fileInput');
-
-attachBtn.addEventListener('click', () => fileInput.click());
-
-fileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-        alert('Файл слишком большой (макс. 5 МБ)');
-        return;
-    }
-
-    attachBtn.disabled = true;
-    attachBtn.textContent = '⏳';
-
-    const ext = file.name.split('.').pop();
-    const fileName = currentUser.id + '/' + Date.now() + '.' + ext;
-    const isImage = file.type.startsWith('image/');
-
-    const { error: uploadError } = await db.storage
-        .from('attachments')
-        .upload(fileName, file);
-
-    if (uploadError) {
-        console.error('Ошибка загрузки файла:', uploadError);
-        alert('Ошибка загрузки: ' + uploadError.message);
-        attachBtn.disabled = false;
-        attachBtn.textContent = '📎';
-        return;
-    }
-
-    const { data: { publicUrl } } = db.storage
-        .from('attachments')
-        .getPublicUrl(fileName);
-
-    await sendMessage(null, isImage ? 'image' : 'file', publicUrl);
-
-    attachBtn.disabled = false;
-    attachBtn.textContent = '📎';
-    fileInput.value = '';
+attachBtn.addEventListener('click', () => {
+    showToast('🚫 Отправка файлов временно отключена');
 });
 
 const searchInput = document.getElementById('searchInput');

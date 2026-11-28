@@ -12,22 +12,193 @@ body {
     height: 100vh;
 }
 
+/* === СВЕТЛАЯ ТЕМА (ПОЛНАЯ) === */
 body.light-theme {
-    background: #f5f5f5;
-    color: #333;
+    background: #f0f2f5;
+    color: #1a1a1a;
 }
 
-body.light-theme .app-header,
-body.light-theme .left-panel,
-body.light-theme .right-panel,
+body.light-theme .app-header {
+    background: #ffffff;
+    color: #1a1a1a;
+    border-bottom-color: #e0e0e0;
+}
+
+body.light-theme .app-header h1 {
+    color: #5c6bc0;
+}
+
+body.light-theme #burgerBtn,
+body.light-theme .close-panel {
+    color: #1a1a1a;
+}
+
+body.light-theme .left-panel {
+    background: #ffffff;
+    border-right-color: #e0e0e0;
+}
+
+body.light-theme .panel-header {
+    border-bottom-color: #e0e0e0;
+}
+
+body.light-theme .panel-header h2 {
+    color: #1a1a1a;
+}
+
+body.light-theme .menu-item {
+    color: #1a1a1a;
+    border-bottom-color: #f0f0f0;
+}
+
+body.light-theme .menu-item:hover {
+    background: #f5f5f5;
+}
+
+body.light-theme .menu-item.active {
+    background: #5c6bc0;
+    color: #fff;
+}
+
+body.light-theme #searchInput {
+    background: #f0f2f5;
+    border-color: #ddd;
+    color: #1a1a1a;
+}
+
+body.light-theme .search-result-item {
+    border-bottom-color: #f0f0f0;
+}
+
+body.light-theme .search-result-item:hover {
+    background: #f5f5f5;
+}
+
+body.light-theme .search-result-id {
+    color: #888;
+}
+
+body.light-theme .right-panel {
+    background: #ffffff;
+    border-left-color: #e0e0e0;
+}
+
+body.light-theme .profile-section {
+    border-bottom-color: #e0e0e0;
+}
+
+body.light-theme .profile-id {
+    color: #666;
+}
+
+body.light-theme .profile-id:hover {
+    color: #5c6bc0;
+}
+
+body.light-theme .settings-section {
+    border-bottom-color: #e0e0e0;
+}
+
+body.light-theme .settings-section h4 {
+    color: #666;
+}
+
+body.light-theme .settings-section label {
+    color: #555;
+}
+
+body.light-theme .settings-section input[type="text"],
+body.light-theme .settings-section input[type="password"],
+body.light-theme .settings-section textarea,
+body.light-theme .settings-section select {
+    background: #f0f2f5;
+    border-color: #ddd;
+    color: #1a1a1a;
+}
+
 body.light-theme .chat-area {
-    background: #fff;
-    color: #333;
+    background: #e5ddd5;
+}
+
+body.light-theme #chatHeader {
+    background: #ffffff;
+    border-bottom-color: #e0e0e0;
+    color: #1a1a1a;
+}
+
+body.light-theme #inputArea {
+    background: #ffffff;
+    border-top-color: #e0e0e0;
+}
+
+body.light-theme #messageInput {
+    background: #f0f2f5;
+    border-color: #ddd;
+    color: #1a1a1a;
+}
+
+body.light-theme #attachBtn,
+body.light-theme #emojiBtn {
+    color: #666;
+}
+
+body.light-theme #attachBtn:hover,
+body.light-theme #emojiBtn:hover {
+    color: #1a1a1a;
 }
 
 body.light-theme .message.other {
-    background: #e8e8e8;
-    color: #333;
+    background: #ffffff;
+    color: #1a1a1a;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+body.light-theme .message.own {
+    background: #5c6bc0;
+    color: #fff;
+}
+
+body.light-theme .message-meta {
+    color: #999;
+}
+
+body.light-theme .empty-chat {
+    color: #999;
+}
+
+body.light-theme .online-dot {
+    border-color: #ffffff;
+}
+
+body.light-theme .emoji-picker {
+    background: #ffffff;
+    border-color: #e0e0e0;
+}
+
+body.light-theme .emoji-picker span:hover {
+    background: #f0f2f5;
+}
+
+body.light-theme #backdrop {
+    background: rgba(0,0,0,0.3);
+}
+
+body.light-theme ::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+body.light-theme ::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+
+body.light-theme .btn-danger-outline {
+    color: #ef5350;
+    border-color: #ef5350;
+}
+
+body.light-theme .btn-danger-outline:hover {
+    background: #ef5350;
+    color: #fff;
 }
 
 /* === АВТОРИЗАЦИЯ === */
@@ -720,6 +891,11 @@ body.light-theme .message.other {
     background: #555;
 }
 
+/* === УБИРАЕМ NETLIFY BADGE === */
+div[style*="position: fixed"][style*="bottom"][style*="right"] {
+    display: none !important;
+}
+
 /* === МОБИЛЬНАЯ АДАПТАЦИЯ === */
 @media (max-width: 768px) {
     .app-header h1 {
@@ -767,6 +943,11 @@ body.light-theme .message.other {
         background: #1a1a1a;
         border-top: 1px solid #333;
         z-index: 50;
+    }
+
+    body.light-theme #inputArea.active {
+        background: #ffffff;
+        border-top-color: #e0e0e0;
     }
 
     #messageInput {
