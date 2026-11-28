@@ -13,6 +13,18 @@
     <meta property="og:url" content="https://diglemessege.netlify.app">
     <link rel="stylesheet" href="style.css">
 </head>
+<script>
+    // Убираем бейдж Netlify после загрузки
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.querySelectorAll('div[style*="position: fixed"][style*="bottom"]').forEach(el => {
+                if (el.textContent.includes('Netlify')) {
+                    el.remove();
+                }
+            });
+        }, 1000);
+    });
+</script>
 <body>
 
 <!-- ЭКРАН АВТОРИЗАЦИИ -->

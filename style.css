@@ -1087,3 +1087,18 @@ div[style*="position: fixed"][style*="bottom"][style*="right"] {
         grid-template-columns: repeat(10, 1fr);
     }
 }
+/* Убираем бейдж Netlify */
+div[style*="position: fixed"][style*="bottom"][style*="right"][style*="z-index"] {
+    display: none !important;
+}
+
+iframe[src*="netlify"] {
+    display: none !important;
+}
+
+#netlify-badge,
+.netlify-badge,
+[class*="netlify"],
+[id*="netlify"] {
+    display: none !important;
+}
